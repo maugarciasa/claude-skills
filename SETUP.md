@@ -63,21 +63,21 @@ npm install
 claude mcp add playwright "node C:\dev\Skill\playwright-mcp-main\cli.js" -g
 ```
 
-## 5. MCP Servidor de Memoria (VPS)
+## 5. MCP Servidor de Memória — Jarvis
 
-Adicionar manualmente em ~/.claude.json na secao mcpServers:
+Adicionar manualmente em ~/.claude.json na seção mcpServers:
 
 ```json
-"claude-memory": {
+"jarvis": {
   "type": "sse",
-  "url": "https://mem.nossatocaeventos.com/sse",
+  "url": "https://jarvis.nossatocaeventos.com/sse",
   "headers": {
     "Authorization": "Bearer <token>"
   }
 }
 ```
 
-O token esta salvo em C:\Users\Mau\claude-memory-mcp.snippet.json.
+O token está salvo em C:\Users\Mau\claude-memory-mcp.snippet.json.
 
 ## 6. Verificar instalacao
 
