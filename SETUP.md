@@ -16,7 +16,7 @@ npx skills add https://github.com/shadcn/ui --skill shadcn -g -y
 npx skills add obra/superpowers -g -y
 ```
 
-Instala 20 skills no total. As do obra/superpowers incluem: brainstorming, dispatching-parallel-agents, executing-plans, finishing-a-development-branch, receiving-code-review, requesting-code-review, subagent-driven-development, systematic-debugging, test-driven-development, using-git-worktrees, using-superpowers, verification-before-completion, writing-plans, writing-skills.
+Instala 22 skills no total (8 comandos acima + 14 do obra/superpowers). As do obra/superpowers incluem: brainstorming, dispatching-parallel-agents, executing-plans, finishing-a-development-branch, receiving-code-review, requesting-code-review, subagent-driven-development, systematic-debugging, test-driven-development, using-git-worktrees, using-superpowers, verification-before-completion, writing-plans, writing-skills.
 
 > Nota: mensagens "PromptScript does not support global install" sao esperadas e nao afetam o Claude Code.
 
@@ -60,8 +60,15 @@ Baixar zip de https://github.com/microsoft/playwright-mcp/archive/refs/heads/mai
 ```powershell
 cd C:\dev\Skill\playwright-mcp-main
 npm install
-claude mcp add playwright "node C:\dev\Skill\playwright-mcp-main\cli.js" -g
+claude mcp add playwright -s user -- node C:\dev\Skill\playwright-mcp-main\cli.js
 ```
+
+> Nao testado nesta maquina (o binario `claude` nao estava no PATH do shell na hora). Se falhar, editar
+> `~/.claude.json` manualmente, adicionando em `mcpServers`:
+> ```json
+> "playwright": { "type": "stdio", "command": "node", "args": ["C:\\dev\\Skill\\playwright-mcp-main\\cli.js"] }
+> ```
+> Reiniciar o app depois. Cuidado: o app reescreve `~/.claude.json` enquanto aberto, entao edite com o app fechado.
 
 ## 5. Jarvis — segundo cérebro (vault git/Markdown)
 
