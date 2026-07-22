@@ -83,7 +83,36 @@ abra apenas as páginas relevantes em `C:\dev\jarvis\wiki\`. O schema e os workf
 (ingest/query/lint) estão em `C:\dev\jarvis\CLAUDE.md`.
 ```
 
-## 6. Verificar instalacao
+## 6. Obsidian (leitura humana do Jarvis)
+
+```powershell
+winget install --id Obsidian.Obsidian --source winget --accept-package-agreements --silent
+```
+
+Depois abrir o Obsidian → *Open folder as vault* → `C:\dev\jarvis` (a config `.obsidian/` já vem versionada no repo).
+
+## 7. Hook do português (UserPromptSubmit)
+
+Adicionar em `~/.claude/settings.json` (mesclar com o conteúdo existente — reinjeta a regra de idioma a cada prompt):
+
+```json
+{
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo '{\"hookSpecificOutput\":{\"hookEventName\":\"UserPromptSubmit\",\"additionalContext\":\"Regra de idioma: responda SEMPRE em portugues do Brasil. Apenas codigo, identificadores, comandos, caminhos e trechos literais citados permanecem no idioma original.\"}}'"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+## 8. Verificar instalacao
 
 ```bash
 npx skills list -g
