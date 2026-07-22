@@ -63,21 +63,25 @@ npm install
 claude mcp add playwright "node C:\dev\Skill\playwright-mcp-main\cli.js" -g
 ```
 
-## 5. MCP Servidor de Memória — Jarvis
+## 5. Jarvis — segundo cérebro (vault git/Markdown)
 
-Adicionar manualmente em ~/.claude.json na seção mcpServers:
+> O antigo servidor MCP (jarvis.nossatocaeventos.com/sse) foi desativado em julho/2026.
+> O Jarvis agora é um vault git/Markdown (método LLM Wiki), consultado por ponteiro — sem token.
 
-```json
-"jarvis": {
-  "type": "sse",
-  "url": "https://jarvis.nossatocaeventos.com/sse",
-  "headers": {
-    "Authorization": "Bearer <token>"
-  }
-}
+```powershell
+gh repo clone maugarciasa/jarvis C:\dev\jarvis
 ```
 
-O token está salvo em C:\Users\Mau\claude-memory-mcp.snippet.json.
+Criar `~/.claude/CLAUDE.md` (global) com o ponteiro:
+
+```markdown
+# Jarvis — segundo cérebro (memória permanente)
+
+Antes de tarefas que dependam de contexto pessoal, decisões passadas ou conhecimento
+acumulado dos projetos, consulte o Jarvis: leia `C:\dev\jarvis\index.md` (catálogo) e
+abra apenas as páginas relevantes em `C:\dev\jarvis\wiki\`. O schema e os workflows
+(ingest/query/lint) estão em `C:\dev\jarvis\CLAUDE.md`.
+```
 
 ## 6. Verificar instalacao
 
