@@ -63,12 +63,23 @@ Em `~/.claude-mem/settings.json`, apontar `CLAUDE_CODE_PATH` para o executavel (
 
 ### Auto-start no login do Windows
 
+⚠️ **Nunca apontar a tarefa para `~/.claude/plugins/marketplaces/thedotmack`** (era o que este
+guia mandava ate 2026-07-23) **nem fixar o numero da versao**. Esses caminhos nao acompanham a
+versao instalada: quando o plugin atualiza, o worker do login sobe a versao velha enquanto o
+plugin resolve a nova. Isso dispara o *version-mismatch recycle* — o successor respawna a versao
+stale, ela ganha a porta 37777 primeiro, a correta bate em `Port already in use` e o loop nunca
+converge (ja medido em 2.424 reciclagens/dia com hooks falhando a cada prompt:
+[#3378](https://github.com/thedotmack/claude-mem/issues/3378),
+[#3216](https://github.com/thedotmack/claude-mem/issues/3216),
+[#3205](https://github.com/thedotmack/claude-mem/issues/3205)).
+
+Usar o script `tools/start-claude-mem-worker.ps1`, que resolve a versao mais recente do cache em
+tempo de execucao e segue correto depois de qualquer atualizacao:
+
 ```powershell
-$plugin = "$env:USERPROFILE\.claude\plugins\cache\thedotmack\claude-mem"
-$versao = (Get-ChildItem $plugin -Directory | Sort-Object Name -Descending | Select-Object -First 1).FullName
-$action = New-ScheduledTaskAction -Execute "bun" -Argument "scripts/worker-service.cjs start" -WorkingDirectory $versao
+$acao = New-ScheduledTaskAction -Execute "powershell.exe" -Argument '-NoProfile -WindowStyle Hidden -ExecutionPolicy Bypass -File "C:\dev\claude-skills\tools\start-claude-mem-worker.ps1"'
 $trigger = New-ScheduledTaskTrigger -AtLogon -User $env:USERNAME
-Register-ScheduledTask -TaskName "claude-mem-worker" -Action $action -Trigger $trigger -RunLevel Highest -Force
+Register-ScheduledTask -TaskName "claude-mem-worker" -Action $acao -Trigger $trigger -RunLevel Highest -Force
 ```
 
 O hook de `SessionStart` do proprio plugin tambem sobe o worker, entao a tarefa agendada
