@@ -23,11 +23,16 @@ import { homedir } from 'node:os';
 
 const args = process.argv.slice(2);
 const flags = new Set(args.filter((a) => a.startsWith('--')));
-const posicionais = args.filter((a) => !a.startsWith('--'));
+
+// `--ext md` consome o proximo argumento: sem isso "md" cairia nos posicionais
+// e seria tratado como o caminho do projeto.
+const iExt = args.indexOf('--ext');
+const consumidos = new Set(iExt >= 0 ? [iExt, iExt + 1] : []);
+const posicionais = args.filter((a, i) => !a.startsWith('--') && !consumidos.has(i));
 const alvo = resolve(posicionais[0] || process.cwd());
 
 const extArg = args.find((a) => a.startsWith('--ext='))?.split('=')[1]
-  || (args.includes('--ext') ? args[args.indexOf('--ext') + 1] : null);
+  || (iExt >= 0 ? args[iExt + 1] : null);
 const EXTS = extArg
   ? new Set(extArg.split(',').map((e) => '.' + e.replace(/^\./, '').trim()))
   : new Set(['.md', '.ts', '.tsx', '.js', '.jsx', '.mjs', '.cjs', '.json', '.py', '.go', '.rs', '.java', '.rb', '.sh', '.sql', '.css', '.scss', '.html', '.yml', '.yaml', '.toml']);

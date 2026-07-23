@@ -43,7 +43,14 @@ function conceitosValidos() {
     const modo = settings.CLAUDE_MEM_MODE || 'code';
     const cache = join(homedir(), '.claude', 'plugins', 'cache', 'thedotmack', 'claude-mem');
     if (!existsSync(cache)) return fallback;
-    const dirs = readdirSync(cache).sort().reverse(); // versão mais recente primeiro
+    // Ordenação semântica, não textual: "13.9.0" > "13.12.0" como string.
+    const dirs = readdirSync(cache)
+      .filter((v) => /^\d+\.\d+\.\d+$/.test(v))
+      .sort((a, b) => {
+        const pa = a.split('.').map(Number);
+        const pb = b.split('.').map(Number);
+        return pb[0] - pa[0] || pb[1] - pa[1] || pb[2] - pa[2];
+      });
     for (const v of dirs) {
       const modeFile = join(cache, v, 'modes', `${modo}.json`);
       if (existsSync(modeFile)) {
