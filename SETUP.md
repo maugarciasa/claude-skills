@@ -105,7 +105,11 @@ node C:\dev\claude-skills\tools\normalize-concepts.mjs           # dry-run
 node C:\dev\claude-skills\tools\normalize-concepts.mjs --apply   # corrige
 ```
 
-Idempotente. Para rodar sozinho a cada sessao, adicionar em `~/.claude/settings.json`:
+Idempotente. Nao conserta observacoes com `concepts: []` — sem prefixo para extrair, nao ha
+o que normalizar; essas ficam fora da injecao ate serem regravadas.
+
+Para rodar sozinho a cada sessao, adicionar em `~/.claude/settings.json` (**ja ativo nesta
+maquina**, verificado plantando um caso quebrado e abrindo sessao nova):
 
 ```json
 "SessionStart": [
