@@ -122,6 +122,22 @@ maquina**, verificado plantando um caso quebrado e abrindo sessao nova):
 ]
 ```
 
+### Manutencao: `tools/check-read-coverage.mjs`
+
+O `/learn-codebase` manda ler todo arquivo-fonte, mas o agente pode declarar "li tudo" e ter
+parado no meio — no vault Jarvis leu 40 de 92, ignorou a camada `raw/` inteira e relatou
+sucesso. Este script confere por fora, contando os `Read` do transcript:
+
+```powershell
+node C:\dev\claude-skills\tools\check-read-coverage.mjs C:\dev\jarvis          # ultima sessao
+node C:\dev\claude-skills\tools\check-read-coverage.mjs C:\dev\jarvis --all    # soma todas
+node C:\dev\claude-skills\tools\check-read-coverage.mjs . --list               # todos faltantes
+```
+
+Sai com codigo 1 se faltar arquivo. Rodar sempre depois de um `/learn-codebase` e alimentar a
+lista de faltantes numa segunda passada. Com `--all` tambem serve para achar o que entrou no
+repo depois da leitura inicial e nunca foi visto.
+
 ## 4. MCP Playwright (automacao de browser)
 
 Baixar zip de https://github.com/microsoft/playwright-mcp/archive/refs/heads/main.zip e extrair para C:\dev\Skill\playwright-mcp-main
