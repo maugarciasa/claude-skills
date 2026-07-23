@@ -75,6 +75,24 @@ O hook de `SessionStart` do proprio plugin tambem sobe o worker, entao a tarefa 
 e redundancia. Para reiniciar o worker: **matar tambem os processos `python.exe` do
 `chroma-mcp`**, senao eles seguram a porta 37777 e o worker novo nao sobe.
 
+### Trocar o modelo de compressao
+
+`CLAUDE_MEM_MODEL` em `~/.claude-mem/settings.json` (com os tiers
+`CLAUDE_MEM_TIER_FAST_MODEL`/`SIMPLE_MODEL`, que vencem para as tarefas rapidas). Haiku
+gera observacoes de qualidade pior e foi quem produziu os `concepts` malformados da secao
+anterior; Sonnet e mais caro mas roda em background, sem bloquear a sessao.
+
+⚠️ **Reiniciar so o worker nao aplica a troca.** Os processos geradores carregam o modelo
+no spawn e o worker os ressuscita segundos depois de subir. Matar todos os PIDs listados em
+`~/.claude-mem/supervisor.json` (worker + `sdk:*` + `chroma-mcp`) antes de subir de novo:
+
+```powershell
+$s = Get-Content "$env:USERPROFILE\.claude-mem\supervisor.json" -Raw | ConvertFrom-Json
+foreach ($p in $s.processes.PSObject.Properties) { Stop-Process -Id $p.Value.pid -Force -ErrorAction SilentlyContinue }
+```
+
+Conferir depois em qualquer observacao nova que `generated_by_model` mudou de fato.
+
 ### Manutencao: `tools/normalize-concepts.mjs`
 
 A injecao de contexto so inclui observacoes cujo `concepts` casa **exatamente** com a lista
